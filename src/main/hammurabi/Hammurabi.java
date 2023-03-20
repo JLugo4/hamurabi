@@ -10,6 +10,7 @@ public class Hammurabi {
     public static void main(String[] args) {
         new Hammurabi().playGame();
     }
+
     public void playGame() {
         // initial values
         int year = 1;
@@ -22,6 +23,7 @@ public class Hammurabi {
         int immigrants = 0;
         int bushelsEaten = 0;
         int harvest = 2000;
+
 
 
         // Introduction to Game.
@@ -48,31 +50,27 @@ public class Hammurabi {
             break;
         }
 
+
         for (year = 1; year <= 10; year++) {
             System.out.println(printSummary(landValue, land, population, immigrants, harvest, bushelsEaten, starved, plague, year));
 
             int bought = askHowManyAcresToBuy(landValue, bushels);
             land = land + bought;
             bushels -= bought * landValue;
-
             if (bought == 0) {
                 int sold = askHowManyAcresToSell(land);
                 land -= sold;
                 bushels += sold * landValue;
             }
-
             int feed = askHowMuchGrainToFeedPeople(bushels);
             bushels -= feed;
 
             int plant = askHowManyAcresToPlant(land, population, bushels);
             bushels -= plant * 2;
-
             plague = plagueDeaths(population);
             population -= plague;
-
             starved = starvationDeaths(population, feed);
             population -= starved;
-
             if (uprising(population, starved)) {
                 System.out.println("Your people yearn for a new ruler...\n" +
                         "_________\n"+
@@ -94,8 +92,27 @@ public class Hammurabi {
             landValue = newCostOfLand();
 
         }
+        playAgain();
+        }
+        // playAgain method
+    public static void playAgain(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Would you like to play again?\n" +
+                "'yes' to play again\n" +
+                "'no' to end game...\n");
+        String playAgain = input.nextLine().toLowerCase();
+        if (playAgain.equals("yes")){
+            main(null);
+        }
+        else if ( playAgain.equals("no")){
+            System.out.println("GG");
+        } else{
+            System.out.println("Invalid response...\n" +
+                    "Please enter 'yes' or 'no'");
+            playAgain();
+        }
     }
-        // New Year summary
+    // New Year summary
         String printSummary ( int land, int landValue, int bushels, int bushelsEaten, int starved, int plague, int population, int immigrants, int year){
 
             String newYearSummary = "";
@@ -115,9 +132,9 @@ public class Hammurabi {
         }
         // Buying land method.
         public int askHowManyAcresToBuy ( int price, int bushels){
-            int acres = getNumber("Enter amount of acres you would like to buy?");
+            int acres = getNumber("Enter amount of acres you would like to buy?\n");
             if (acres * price > bushels) {
-                System.out.print("You do not have enough bushels for that transaction.");
+                System.out.print("You do not have enough bushels for that transaction.\n");
                 acres = 0;
             } else if (bushels > price * acres && acres > 0) {
                 System.out.println("Transaction complete.\n" +
@@ -166,7 +183,7 @@ public class Hammurabi {
             int plant = 0;
 
             while (true) {
-                plant = getNumber("You can plant this year... How much would you like to plant?\n");
+                plant = getNumber("You can plant this year...\t How much would you like to plant?\n");
                 if (plant > acresOwned) {
                     System.out.println("We do not have enough land fo that!\n");
                 }
@@ -197,12 +214,10 @@ public class Hammurabi {
         }
         // starvationDeaths
         public int starvationDeaths ( int population, int bushelsFedToPeople){
-            int starve = 0;
-            int survivors = bushelsFedToPeople / 20;
-            if (population > bushelsFedToPeople / 20) {
-                starve = population - survivors;
-            }
-            return starve;
+            int survivors = Math.floorDiv(bushelsFedToPeople, 20);
+            int deaths = population - survivors;
+
+            return Math.max(deaths, 0);
         }
         // Uprising conditions method.
         public boolean uprising ( int population, int howManyPeopleStarved){

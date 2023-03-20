@@ -218,7 +218,7 @@ The above are requirements. **The methods that do calculations**, not input/outp
 
 ### Yo! Test it!
 
-You'll see there is a Test File (HammurabiTest.java) you need to be able to run against your code to prove your solution works. Use It!!
+You'll see there is a Test File (java.HammurabiTest.java) you need to be able to run against your code to prove your solution works. Use It!!
 
 But realize that you'll have to structure your solution so that app classes are in one source direstory and your test files is in another. Study your other labs to figure out what to do.
 
